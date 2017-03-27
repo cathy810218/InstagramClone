@@ -42,6 +42,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let photosAction = UIAlertAction(title: "Photos", style: .default) { (action) in
             // show imagePicker
             self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
+            self.imagePicker.allowsEditing = true
             self.present(self.imagePicker, animated: true, completion: nil)
 
         }
