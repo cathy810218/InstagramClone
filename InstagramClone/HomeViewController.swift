@@ -11,22 +11,53 @@ import UIKit
 class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var postButton: UIButton!
+    @IBOutlet weak var filterButton: UIButton!
+    
+    // constraints
+    @IBOutlet weak var postButtonVerticalConstraint: NSLayoutConstraint!
+    @IBOutlet weak var filterButtonVerticalConstraint: NSLayoutConstraint!
     
     let imagePicker = UIImagePickerController()
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        postButtonVerticalConstraint.constant = 8
+        filterButtonVerticalConstraint.constant = 15
+        
+        UIView.animate(withDuration: 1) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         imagePicker.delegate = self
+    }
+
+    @IBAction func postButtonPressed(_ sender: Any) {
+        if let image = self.imageView.image {
+            // if there's an image inside the imageView
+            
+            // create a post object
+            let newPost = Post(image: image, date: Date())
+            
+            CloudKit.shared.save(post: newPost, completion: { (success) in
+                if success {
+                    print("Success")
+                } else {
+                    print("Error saving")
+                }
+            })
+        }
+    }
+
+    @IBAction func filterButtonPressed(_ sender: Any) {
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-
+    
+    
     @IBAction func tapGesture(_ sender: Any) {
         let alert = UIAlertController(title: "Choose your photo",
                                       message: "",
@@ -64,9 +95,20 @@ class HomeViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let image: UIImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-        imageView.image = image
-        imagePicker.dismiss(animated: true, completion: nil)
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            imagePicker.dismiss(animated: true) {
+                UIView.transition(with: self.imageView, duration: 1, options: .transitionCrossDissolve, animations: {
+                    self.imageView.image = image
+                }, completion: nil)
+            }
+        } else{
+            print("Something went wrong")
+        }
+
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
 
 }

@@ -3,13 +3,31 @@ import UIKit
 enum FilterName : String {
     case vintage = "CIPhotoEffectTransfer"
     case blackAndWhite = "CIPhotoEffectMono"
+    case sepia = "CISepiaTone"
+    case colorInvert = "CIColorInvert"
+    case colorPosterize = "CIColorPosterize"
 }
 
 typealias FilterCompletion = (UIImage?) -> ()
 
 class Filters {
     
+    static let shared = Filters() // singleton
+
     static var originalImage = UIImage()
+    
+    let context: CIContext
+    
+    private init() {
+        //GPU Context
+        let options = [kCIContextWorkingColorSpace: NSNull()]
+        guard let eaglContext = EAGLContext(api: .openGLES2) else {
+            fatalError("Failed to create EAGLContext.")
+        }
+        
+        context = CIContext(eaglContext: eaglContext, options: options)
+    }
+    
     
     class func filter(name: FilterName, image: UIImage, completion: @escaping FilterCompletion) {
         OperationQueue().addOperation {
@@ -19,16 +37,12 @@ class Filters {
             let coreImage = CIImage(image: image)
             filter.setValue(coreImage, forKey: kCIInputImageKey)
             
-            //GPU Context
-            let options = [kCIContextWorkingColorSpace: NSNull()]
-            guard let eaglContext = EAGLContext(api: .openGLES2) else { fatalError("Failed to create EAGLContext.") }
-            
-            let ciContext = CIContext(eaglContext: eaglContext, options: options)
+
             
             //Get final image using GPU
             guard let outputImage = filter.outputImage else { fatalError("Failed to get output image from Filter.") }
             
-            if let cgImage = ciContext.createCGImage(outputImage, from: outputImage.extent) {
+            if let cgImage = Filters.shared.context.createCGImage(outputImage, from: outputImage.extent) {
                 
                 let finalImage = UIImage(cgImage: cgImage)
                 

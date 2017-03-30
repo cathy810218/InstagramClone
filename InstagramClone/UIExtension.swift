@@ -32,3 +32,9 @@ extension UIImage {
     }
     
 }
+
+extension UIResponder {
+    static var identifer: String {
+        return String(describing: self)
+    }
+}
