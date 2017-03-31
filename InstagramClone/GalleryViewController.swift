@@ -15,11 +15,8 @@ protocol GalleryViewControllerDelegate: class {
 class GalleryViewController: UIViewController {
 
     weak var delegate: GalleryViewControllerDelegate?
-//    var pinchScale: CGFloat = 0.0
-//    var scale: CGFloat = 0.0
     
     @IBOutlet var pinchGesture: UIPinchGestureRecognizer!
-    
     @IBOutlet weak var collectionView: UICollectionView!
     
     var allPosts = [Post]() {
@@ -34,7 +31,6 @@ class GalleryViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.collectionViewLayout = GalleryCollectionViewLayout(columns: 1)
-        // Do any additional setup after loading the view.
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -58,17 +54,14 @@ class GalleryViewController: UIViewController {
         guard let layout = collectionView.collectionViewLayout as? GalleryCollectionViewLayout else {
             return
         }
-        
         switch sender.state {
         case .began:
-//            pinchScale = sender.scale
             print("Start pinching")
             break
         case .changed:
             break
         case .ended:
             print("end pinching")
-//            scale = pinchScale * sender.scale
             let columns = sender.velocity > 0 ? layout.columns - 1 : layout.columns + 1
             if columns < 1 || columns > 4 { return }
              collectionView.setCollectionViewLayout(GalleryCollectionViewLayout(columns: columns), animated: true)

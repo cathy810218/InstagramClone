@@ -119,6 +119,7 @@
                                 </constraints>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="fDe-9n-YQ9" appends="YES" id="wTm-vJ-xfl"/>
+                                    <outletCollection property="gestureRecognizers" destination="XFt-h7-JhA" appends="YES" id="jzZ-3F-wc0"/>
                                 </connections>
                             </imageView>
                         </subviews>
@@ -156,6 +157,11 @@
                         <action selector="tapGesture:" destination="BYZ-38-t0r" id="4n0-NW-f5N"/>
                     </connections>
                 </tapGestureRecognizer>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="XFt-h7-JhA">
+                    <connections>
+                        <action selector="longPressed:" destination="BYZ-38-t0r" id="NiZ-Bh-Zex"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="733.60000000000002" y="186.65667166416793"/>
         </scene>
@@ -186,7 +192,7 @@
                                         <rect key="frame" x="22.5" y="0.0" width="330" height="331"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="331" height="331"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="330" height="331"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KyA-dd-c5b">

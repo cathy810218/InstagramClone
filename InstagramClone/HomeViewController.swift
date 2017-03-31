@@ -97,60 +97,11 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
             return
         }
         showOrHideFilterCollection()
-
-        
-        
-//        
-//        let alertController = UIAlertController(title: "Filter", message: "Please select a filter", preferredStyle:.alert)
-//        
-//        let blackAndWhiteAction = UIAlertAction(title: "Black and White", style: .default) { (action ) in
-//            Filters.filter(name: .blackAndWhite, image: image, completion: {(filteredImage) in
-//                self.imageView.image = filteredImage
-//            })
-//        }
-//        let vintageAction = UIAlertAction(title: "Vintage", style: .default) { (action) in
-//            Filters.filter(name: .vintage, image: image, completion: {(filteredImage) in
-//                self.imageView.image = filteredImage
-//            })
-//        }
-//        
-//        let sepiaAction = UIAlertAction(title: "Sepia", style: .default) { (action) in
-//            Filters.filter(name: .sepia, image: image, completion: {(filteredImage) in
-//                self.imageView.image = filteredImage
-//            })
-//        }
-//        
-//        let colorInvertAction = UIAlertAction(title: "Invert", style: .default) { (action) in
-//            Filters.filter(name: .colorInvert, image: image, completion: {(filteredImage) in
-//                self.imageView.image = filteredImage
-//            })
-//        }
-//        
-//        let colorPosterizeAction = UIAlertAction(title: "Polarize", style: .default) { (action) in
-//            Filters.filter(name: .colorPosterize, image: image, completion: {(filteredImage) in
-//                self.imageView.image = filteredImage
-//            })
-//        }
-//        let resetAction = UIAlertAction(title: "Reset Image", style: .destructive) {(action) in
-//            self.imageView.image = self.originalImage
-//        }
-//        
-//        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-//        
-//        
-//        alertController.addAction(blackAndWhiteAction)
-//        alertController.addAction(vintageAction)
-//        alertController.addAction(sepiaAction)
-//        alertController.addAction(colorInvertAction)
-//        alertController.addAction(colorPosterizeAction)
-//        alertController.addAction(resetAction)
-//        alertController.addAction(cancelAction)
-//        
-//        self.present(alertController, animated: true, completion: nil)
     }
     
+    //MARK: UIGestureRecognizer
     
-    @IBAction func tapGesture(_ sender: Any) {
+    @IBAction func tapGesture(_ sender: UITapGestureRecognizer) {
         let alert = UIAlertController(title: "Choose your photo",
                                       message: "",
                                       preferredStyle: .actionSheet)
@@ -185,14 +136,11 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
         self.present(alert, animated: true, completion: nil)
     }
     
-    // TODO: Add this function
-    func longPressed(_ sender: Any) {
+    @IBAction func longPressed(_ sender: UILongPressGestureRecognizer) {
         if SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter) {
-            
             guard let composeController = SLComposeViewController(forServiceType: SLServiceTypeTwitter) else {
                 return
             }
-            
             // Put your share data to compose controller
             composeController.add(imageView.image)
             present(composeController, animated: true, completion: nil)
