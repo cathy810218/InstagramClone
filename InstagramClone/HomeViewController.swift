@@ -189,7 +189,7 @@ extension HomeViewController: GalleryViewControllerDelegate {
 
 extension HomeViewController: UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
             Filters.originalImage = image
             imagePicker.dismiss(animated: true) {
                 UIView.transition(with: self.imageView, duration: 1, options: .transitionCrossDissolve, animations: {
@@ -205,4 +205,6 @@ extension HomeViewController: UIImagePickerControllerDelegate {
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
     }
+    
+    
 }
