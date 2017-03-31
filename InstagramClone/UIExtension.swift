@@ -34,7 +34,7 @@ extension UIImage {
 }
 
 extension UIResponder {
-    static var identifer: String {
+    static var identifier: String {
         return String(describing: self)
     }
 }

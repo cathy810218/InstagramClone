@@ -30,9 +30,9 @@ class GalleryCollectionViewLayout: UICollectionViewFlowLayout {
         // initialize the parent using super and we can modify parent members
         super.init()
         
-        self.minimumLineSpacing = 50 // horizontal distance
+        self.minimumLineSpacing = 30 // horizontal distance
         self.minimumInteritemSpacing = spacing // vertical distance
-        self.itemSize = CGSize(width: itemWidth, height: itemWidth + 30)
+        self.itemSize = CGSize(width: itemWidth, height: itemWidth)
         
     }
     

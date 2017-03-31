@@ -14,7 +14,7 @@ class Filters {
     
     static let shared = Filters() // singleton
 
-    static var originalImage = UIImage()
+    static var originalImage: UIImage?
     
     let context: CIContext
     
@@ -24,7 +24,6 @@ class Filters {
         guard let eaglContext = EAGLContext(api: .openGLES2) else {
             fatalError("Failed to create EAGLContext.")
         }
-        
         context = CIContext(eaglContext: eaglContext, options: options)
     }
     
