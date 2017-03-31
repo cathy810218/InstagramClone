@@ -119,7 +119,6 @@
 			children = (
 				6BF5DB8A1E89B0CD008F43F7 /* HomeViewController.swift */,
 				6B42A65D1E8C2BDC000314FE /* GalleryViewController.swift */,
-				6B42A6611E8C3799000314FE /* GalleryCollectionViewLayout.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -127,6 +126,7 @@
 		6B370DB71E8B17A8006DAC04 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6B42A6611E8C3799000314FE /* GalleryCollectionViewLayout.swift */,
 				6B370DAE1E8B165B006DAC04 /* UIExtension.swift */,
 				6B370DB01E8B1688006DAC04 /* CloudKit.swift */,
 				6BF5DB881E89B0CD008F43F7 /* AppDelegate.swift */,

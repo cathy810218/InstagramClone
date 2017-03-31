@@ -62,20 +62,17 @@ class GalleryViewController: UIViewController {
         switch sender.state {
         case .began:
 //            pinchScale = sender.scale
+            print("Start pinching")
             break
         case .changed:
             break
         case .ended:
+            print("end pinching")
 //            scale = pinchScale * sender.scale
             let columns = sender.velocity > 0 ? layout.columns - 1 : layout.columns + 1
-            if columns < 1 || columns > 10 { return }
-                collectionView.setCollectionViewLayout(layout, animated: true)
+            if columns < 1 || columns > 4 { return }
+             collectionView.setCollectionViewLayout(GalleryCollectionViewLayout(columns: columns), animated: true)
             
-//            let newSize = CGSize(width: layout.itemSize.width * scale, height: layout.itemSize.height * scale){
-//            collectionView.performBatchUpdates({
-//                layout.itemSize = newSize
-//                layout.invalidateLayout()
-//            }, completion: nil)
         default:
             break
         }
