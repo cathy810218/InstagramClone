@@ -1,11 +1,15 @@
 import UIKit
 
-enum FilterName : String {
+enum FilterType : String {
+    case pixellate = "CIPixellate"
     case vintage = "CIPhotoEffectTransfer"
     case blackAndWhite = "CIPhotoEffectMono"
     case sepia = "CISepiaTone"
-    case colorInvert = "CIColorInvert"
+    case comic = "CIComicEffect"
     case colorPosterize = "CIColorPosterize"
+    
+    static let allFilters = [pixellate, vintage, blackAndWhite, sepia, comic, colorPosterize]
+    static let allFiltersString = ["Pixellate", "Vintage", "Mono", "Sepia", "Comic", "Posterize"]
 }
 
 typealias FilterCompletion = (UIImage?) -> ()
@@ -28,7 +32,7 @@ class Filters {
     }
     
     
-    class func filter(name: FilterName, image: UIImage, completion: @escaping FilterCompletion) {
+    class func filter(name: FilterType, image: UIImage, completion: @escaping FilterCompletion) {
         OperationQueue().addOperation {
             
             guard let filter = CIFilter(name: name.rawValue) else { fatalError("Failed to create CIFilter") }

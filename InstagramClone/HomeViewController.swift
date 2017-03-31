@@ -10,7 +10,7 @@ import UIKit
 import Social
 
 class HomeViewController: UIViewController, UINavigationControllerDelegate {
-
+    
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var postButton: UIButton!
     @IBOutlet weak var filterButton: UIButton!
@@ -25,7 +25,6 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var imageViewYConstraint: NSLayoutConstraint!
     
     let imagePicker = UIImagePickerController()
-    let filterNames: [FilterName] = [.vintage, .blackAndWhite, .colorInvert, .colorPosterize, .sepia]
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -42,7 +41,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
             self.view.layoutIfNeeded()
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView.dataSource = self
@@ -51,7 +50,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
         setupGalleryDelegate()
         
     }
-
+    
     func setupGalleryDelegate() {
         if let tabBarController = self.tabBarController {
             guard let viewControllers = tabBarController.viewControllers else { return }
@@ -91,7 +90,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
             self.view.layoutIfNeeded()
         }
     }
-
+    
     @IBAction func filterButtonPressed(_ sender: Any) {
         guard let _ = Filters.originalImage else {
             return
@@ -118,7 +117,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
             self.imagePicker.sourceType = UIImagePickerControllerSourceType.photoLibrary
             self.imagePicker.allowsEditing = true
             self.present(self.imagePicker, animated: true, completion: nil)
-
+            
         }
         let cameraAction = UIAlertAction(title: "Camera", style: .default) { (action) in
             if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -158,20 +157,22 @@ extension HomeViewController: UICollectionViewDataSource, UICollectionViewDelega
         }
         guard let resizedImage = originalImage.resize(size: CGSize(width: 150, height: 150)) else { return filterCell }
         
-        let filterName = self.filterNames[indexPath.row]
+        let filterName = FilterType.allFilters[indexPath.row]
+        filterCell.filterNameLabel.text = FilterType.allFiltersString[indexPath.row]
         
         Filters.filter(name: filterName, image: resizedImage) { (filteredImage) in
             filterCell.filterImageView.image = filteredImage
         }
+        
         return filterCell
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return filterNames.count
+        return FilterType.allFilters.count
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedFilterName = filterNames[indexPath.row]
+        let selectedFilterName = FilterType.allFilters[indexPath.row]
         guard let selectedImage = Filters.originalImage else { return }
         Filters.filter(name: selectedFilterName, image: selectedImage) { (filteredImage) in
             self.imageView.image = filteredImage
@@ -205,6 +206,5 @@ extension HomeViewController: UIImagePickerControllerDelegate {
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
     }
-    
     
 }
