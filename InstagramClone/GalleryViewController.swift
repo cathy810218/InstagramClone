@@ -18,16 +18,20 @@ class GalleryViewController: UIViewController {
     
     @IBOutlet var pinchGesture: UIPinchGestureRecognizer!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     var allPosts = [Post]() {
         // property observer
         didSet {
             collectionView.reloadData()
+            activityIndicator.stopAnimating()
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        activityIndicator.startAnimating()
+        activityIndicator.hidesWhenStopped = true
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.collectionViewLayout = GalleryCollectionViewLayout(columns: 1)
@@ -35,11 +39,12 @@ class GalleryViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        update()
+        updateFeed()
     }
     
-    func update() {
-        CloudKit.shared.getPosts { (posts) in
+    func updateFeed() {
+        
+        CloudKit.shared.getPosts(fromPrivateDatabase: true) { (posts) in
             if let posts = posts {
                 self.allPosts = posts.sorted(by: self.sorter)
             }

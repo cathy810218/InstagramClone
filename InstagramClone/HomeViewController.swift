@@ -22,13 +22,18 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
     @IBOutlet weak var postButtonVerticalConstraint: NSLayoutConstraint!
     @IBOutlet weak var filterButtonVerticalConstraint: NSLayoutConstraint!
     
+    @IBOutlet weak var publicPostButtonVerticalConstraint: NSLayoutConstraint!
     @IBOutlet weak var imageViewYConstraint: NSLayoutConstraint!
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     let imagePicker = UIImagePickerController()
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         filterCollectionViewHightConstraint.constant = 0
+        publicPostButtonVerticalConstraint.constant = -80
+        postButtonVerticalConstraint.constant = -80
         imageViewYConstraint.constant = 0
     }
     
@@ -36,7 +41,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
         super.viewDidAppear(animated)
         postButtonVerticalConstraint.constant = 15
         filterButtonVerticalConstraint.constant = 8
-        
+        publicPostButtonVerticalConstraint.constant = 15
         UIView.animate(withDuration: 1) {
             self.view.layoutIfNeeded()
         }
@@ -44,6 +49,7 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        activityIndicator.hidesWhenStopped = true
         collectionView.dataSource = self
         collectionView.delegate = self
         imagePicker.delegate = self
@@ -60,22 +66,45 @@ class HomeViewController: UIViewController, UINavigationControllerDelegate {
         }
     }
     
-    @IBAction func postButtonPressed(_ sender: Any) {
+    @IBAction func publicPostButtonPressed(_ sender: Any) {
+        activityIndicator.startAnimating()
         if let image = self.imageView.image {
             // if there's an image inside the imageView
             
             // create a post object
             let newPost = Post(image: image, date: Date())
             
-            CloudKit.shared.save(post: newPost, completion: { (success) in
-                if success {
-                    print("Success")
-                } else {
-                    print("Error saving")
-                }
+            CloudKit.shared.save(post: newPost, toPrivateDatabase: false, completion: { (success) in
+                let alert = success ? UIAlertController(title: "Successfully Uploaded", message: "Now go to Public feed to check out your new post.", preferredStyle: .alert) : UIAlertController(title: "Oh No!", message: "Something is wrong! Please make sure that you're logged in to iCloud on your device.", preferredStyle: .alert)
+                let okayAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okayAction)
+                self.present(alert, animated: true, completion: { 
+                    self.activityIndicator.stopAnimating()
+                })
             })
         }
     }
+    
+    
+    @IBAction func postButtonPressed(_ sender: Any) {
+        activityIndicator.startAnimating()
+        if let image = self.imageView.image {
+            // if there's an image inside the imageView
+            
+            // create a post object
+            let newPost = Post(image: image, date: Date())
+            
+            CloudKit.shared.save(post: newPost, toPrivateDatabase: true, completion: { (success) in
+                let alert = success ? UIAlertController(title: "Successfully Uploaded", message: "Now go to Private feed to check out your new post.", preferredStyle: .alert) : UIAlertController(title: "Oh No!", message: "Something is wrong! Please make sure that you're logged in to iCloud on your device.", preferredStyle: .alert)
+                let okayAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(okayAction)
+                self.present(alert, animated: true, completion: {
+                    self.activityIndicator.stopAnimating()
+                })
+            })
+        }
+    }
+    
     
     func showOrHideFilterCollection() {
         if filterCollectionViewHightConstraint.constant == 150 {
